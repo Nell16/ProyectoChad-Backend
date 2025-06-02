@@ -1,5 +1,6 @@
 package com.proyectochad.backend.controller
 
+import com.proyectochad.backend.dto.LoginRequestDTO
 import com.proyectochad.backend.model.Usuario
 import com.proyectochad.backend.service.UsuarioService
 import org.springframework.http.ResponseEntity
@@ -11,11 +12,21 @@ class UsuarioController(
     private val usuarioService: UsuarioService
 ) {
 
+    //POST http://localhost:8080/api/usuarios/registro
     @PostMapping("/registro")
     fun registrarUsuario(@RequestBody usuario: Usuario): ResponseEntity<Usuario> {
         return ResponseEntity.ok(usuarioService.registrar(usuario))
     }
 
+    //POST http://localhost:8080/api/usuarios/login
+    @PostMapping("/login")
+    fun login(@RequestBody loginRequest: LoginRequestDTO): ResponseEntity<Usuario> {
+        val usuario = usuarioService.login(loginRequest.correo, loginRequest.contrasena)
+        return if (usuario != null) ResponseEntity.ok(usuario)
+        else ResponseEntity.status(401).build()
+    }
+
+    //GET http://localhost:8080/api/usuarios/{id}
     @GetMapping("/{id}")
     fun buscarPorId(@PathVariable id: Long): ResponseEntity<Usuario> {
         val usuario = usuarioService.buscarPorId(id)

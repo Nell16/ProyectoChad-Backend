@@ -38,4 +38,10 @@ class UsuarioServiceImpl(
         return usuarioRepository.save(usuarioActualizado)
     }
 
+    override fun login(correo: String, contrasena: String): Usuario? {
+        return usuarioRepository.findAll().find {
+            it.correo.equals(correo, ignoreCase = true) && it.contrasena == contrasena
+        }
+    }
+
 }

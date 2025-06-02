@@ -7,4 +7,6 @@ interface UsuarioService {
     fun buscarPorId(id: Long): Usuario?
     fun listarPorRol(rol: String): List<Usuario>
     fun actualizarRol(id: Long, nuevoRol: String): Usuario
+    fun login(correo: String, contrasena: String): Usuario?
+
 }

@@ -32,10 +32,15 @@ class ReparacionServiceImpl(
 
     override fun actualizarEstado(id: Long, nuevoEstado: String): Reparacion {
         val reparacion = obtenerPorId(id)
-        val estado = EstadoReparacion.valueOf(nuevoEstado.uppercase())
+        val estado = try {
+            EstadoReparacion.valueOf(nuevoEstado.uppercase())
+        } catch (e: IllegalArgumentException) {
+            throw IllegalArgumentException("Estado no válido. Usa: PENDIENTE, REVISION, REPARADO o ENTREGADO")
+        }
         val actualizada = reparacion.copy(estado = estado)
         return reparacionRepository.save(actualizada)
     }
+
 
     override fun listarPorUsuarioId(id: Long): List<Reparacion> {
         return reparacionRepository.findAll()
@@ -43,27 +48,34 @@ class ReparacionServiceImpl(
     }
 
     override fun asignarTecnico(reparacionId: Long, tecnicoId: Long): Reparacion {
-        val reparacion = reparacionRepository.findById(reparacionId)
-            .orElseThrow { IllegalArgumentException("Reparación no encontrada") }
-
+        val reparacion = obtenerPorId(reparacionId)
+        if (reparacion.tecnico?.id == tecnicoId) {
+            throw IllegalArgumentException("Este técnico ya está asignado a la reparación")
+        }
         val tecnico = usuarioRepository.findById(tecnicoId)
             .orElseThrow { IllegalArgumentException("Técnico no encontrado") }
-
         if (tecnico.rol != Rol.TECNICO && tecnico.rol != Rol.ADMIN) {
             throw IllegalArgumentException("Este usuario no puede ser técnico")
         }
-
         val actualizada = reparacion.copy(tecnico = tecnico)
         return reparacionRepository.save(actualizada)
     }
 
+
     override fun listarPorTecnicoId(tecnicoId: Long): List<Reparacion> {
         return reparacionRepository.findAll().filter {
             it.tecnico?.id == tecnicoId
-
         }
     }
 
-
-
+    override fun actualizarDiagnostico(id: Long, diagnostico: String, solucion: String, costo: Double): Reparacion {
+        val reparacion = obtenerPorId(id)
+        val actualizada = reparacion.copy(
+            diagnostico = diagnostico,
+            solucion = solucion,
+            costo = costo,
+            estado = EstadoReparacion.REVISION // 👈 Cambio automático de estado
+        )
+        return reparacionRepository.save(actualizada)
+    }
 }
