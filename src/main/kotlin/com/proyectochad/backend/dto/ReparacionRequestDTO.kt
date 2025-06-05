@@ -5,5 +5,6 @@ data class ReparacionRequestDTO(
     val tipoEquipo: String,
     val marca: String,
     val modelo: String,
-    val descripcionFalla: String
+    val descripcionFalla: String,
+    val servicioId: Long
 )

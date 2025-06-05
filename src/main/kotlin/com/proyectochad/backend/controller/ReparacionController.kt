@@ -4,6 +4,7 @@ import com.proyectochad.backend.dto.ReparacionDiagnosticoDTO
 import com.proyectochad.backend.dto.ReparacionRequestDTO
 import com.proyectochad.backend.model.Reparacion
 import com.proyectochad.backend.service.ReparacionService
+import com.proyectochad.backend.service.ServicioService
 import com.proyectochad.backend.service.UsuarioService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -12,20 +13,24 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/reparaciones")
 class ReparacionController(
     private val reparacionService: ReparacionService,
-    private val usuarioService: UsuarioService
+    private val usuarioService: UsuarioService,
+    private val servicioService: ServicioService
 ) {
 
-    //POST http://localhost:8080/api/reparaciones
+    // POST http://localhost:8080/api/reparaciones
     @PostMapping
     fun crearReparacion(@RequestBody request: ReparacionRequestDTO): ResponseEntity<Reparacion> {
         val usuario = usuarioService.buscarPorId(request.usuarioId)
+            ?: return ResponseEntity.badRequest().build()
+        val servicio = servicioService.buscarPorId(request.servicioId)
             ?: return ResponseEntity.badRequest().build()
         val nueva = Reparacion(
             usuario = usuario,
             tipoEquipo = request.tipoEquipo,
             marca = request.marca,
             modelo = request.modelo,
-            descripcionFalla = request.descripcionFalla
+            descripcionFalla = request.descripcionFalla,
+            servicio = servicio
         )
         return ResponseEntity.ok(reparacionService.crearReparacion(nueva))
     }

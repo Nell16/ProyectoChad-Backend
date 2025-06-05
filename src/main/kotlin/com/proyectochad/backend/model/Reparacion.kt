@@ -17,6 +17,10 @@ data class Reparacion(
     @JoinColumn(name = "tecnico_id")
     val tecnico: Usuario? = null,
 
+    @ManyToOne
+    @JoinColumn(name = "servicio_id")
+    val servicio: Servicio? = null,
+
     val tipoEquipo: String,
     val marca: String,
     val modelo: String,
