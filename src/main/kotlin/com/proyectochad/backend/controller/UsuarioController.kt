@@ -1,6 +1,7 @@
 package com.proyectochad.backend.controller
 
 import com.proyectochad.backend.dto.LoginRequestDTO
+import com.proyectochad.backend.dto.LoginResponseDTO
 import com.proyectochad.backend.model.Usuario
 import com.proyectochad.backend.service.UsuarioService
 import org.springframework.http.ResponseEntity
@@ -20,9 +21,9 @@ class UsuarioController(
 
     //POST http://localhost:8080/api/usuarios/login
     @PostMapping("/login")
-    fun login(@RequestBody loginRequest: LoginRequestDTO): ResponseEntity<Usuario> {
-        val usuario = usuarioService.login(loginRequest.correo, loginRequest.contrasena)
-        return if (usuario != null) ResponseEntity.ok(usuario)
+    fun login(@RequestBody loginRequest: LoginRequestDTO): ResponseEntity<LoginResponseDTO> {
+        val respuesta = usuarioService.loginYGenerarToken(loginRequest.correo, loginRequest.contrasena)
+        return if (respuesta != null) ResponseEntity.ok(respuesta)
         else ResponseEntity.status(401).build()
     }
 

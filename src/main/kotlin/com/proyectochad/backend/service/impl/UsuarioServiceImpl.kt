@@ -1,14 +1,17 @@
 package com.proyectochad.backend.service.impl
 
+import com.proyectochad.backend.dto.LoginResponseDTO
 import com.proyectochad.backend.model.Rol
 import com.proyectochad.backend.model.Usuario
 import com.proyectochad.backend.repository.UsuarioRepository
+import com.proyectochad.backend.security.JwtService
 import com.proyectochad.backend.service.UsuarioService
 import org.springframework.stereotype.Service
 
 @Service
 class UsuarioServiceImpl(
-    private val usuarioRepository: UsuarioRepository
+    private val usuarioRepository: UsuarioRepository,
+    private val jwtService: JwtService
 ) : UsuarioService {
 
     override fun registrar(usuario: Usuario): Usuario {
@@ -38,10 +41,20 @@ class UsuarioServiceImpl(
         return usuarioRepository.save(usuarioActualizado)
     }
 
-    override fun login(correo: String, contrasena: String): Usuario? {
-        return usuarioRepository.findAll().find {
-            it.correo.equals(correo, ignoreCase = true) && it.contrasena == contrasena
-        }
+    override fun loginYGenerarToken(correo: String, contrasena: String): LoginResponseDTO? {
+        val usuario = usuarioRepository.findByCorreo(correo)
+            ?: return null
+
+        if (usuario.contrasena != contrasena) return null
+
+        val token = jwtService.generarToken(usuario.correo, usuario.rol.name)
+
+        return LoginResponseDTO(
+            token = token,
+            correo = usuario.correo,
+            rol = usuario.rol.name
+        )
     }
+
 
 }

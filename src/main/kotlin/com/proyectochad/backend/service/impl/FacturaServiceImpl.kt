@@ -17,4 +17,9 @@ class FacturaServiceImpl(
     override fun listarPorCliente(clienteId: Long): List<Factura> {
         return facturaRepository.findByClienteId(clienteId)
     }
+
+    override fun buscarPorId(id: Long): Factura? {
+        return facturaRepository.findById(id).orElse(null)
+    }
+
 }

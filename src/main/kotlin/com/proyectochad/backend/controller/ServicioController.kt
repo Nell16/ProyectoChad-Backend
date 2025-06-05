@@ -1,7 +1,9 @@
 package com.proyectochad.backend.controller
 
+import com.proyectochad.backend.dto.ServicioRequestDTO
 import com.proyectochad.backend.model.Servicio
 import com.proyectochad.backend.service.ServicioService
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -13,8 +15,13 @@ class ServicioController(
 
     // POST http://localhost:8080/api/servicios
     @PostMapping
-    fun crear(@RequestBody servicio: Servicio): ResponseEntity<Servicio> {
-        return ResponseEntity.ok(servicioService.crear(servicio))
+    fun crear(@RequestBody @Valid request: ServicioRequestDTO): ResponseEntity<Servicio> {
+        val nuevo = Servicio(
+            nombre = request.nombre,
+            descripcion = request.descripcion,
+            precioBase = request.precio
+        )
+        return ResponseEntity.ok(servicioService.crear(nuevo))
     }
 
     // GET http://localhost:8080/api/servicios

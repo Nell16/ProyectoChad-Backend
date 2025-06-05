@@ -7,7 +7,7 @@ import com.proyectochad.backend.service.ReparacionService
 import org.springframework.stereotype.Service
 import com.proyectochad.backend.repository.UsuarioRepository
 import com.proyectochad.backend.model.Rol
-
+import com.proyectochad.backend.model.Servicio
 
 
 @Service
@@ -78,4 +78,11 @@ class ReparacionServiceImpl(
         )
         return reparacionRepository.save(actualizada)
     }
+
+    override fun asignarServicio(reparacionId: Long, servicio: Servicio): Reparacion {
+        val reparacion = obtenerPorId(reparacionId)
+        val actualizada = reparacion.copy(servicio = servicio)
+        return reparacionRepository.save(actualizada)
+    }
+
 }

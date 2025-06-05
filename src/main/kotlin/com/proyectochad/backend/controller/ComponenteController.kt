@@ -4,6 +4,7 @@ import com.proyectochad.backend.dto.ComponenteRequestDTO
 import com.proyectochad.backend.model.Componente
 import com.proyectochad.backend.service.ComponenteService
 import com.proyectochad.backend.service.ReparacionService
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -15,7 +16,7 @@ class ComponenteController(
 ) {
 
     @PostMapping
-    fun agregar(@RequestBody request: ComponenteRequestDTO): ResponseEntity<Componente> {
+    fun agregar(@RequestBody @Valid request: ComponenteRequestDTO): ResponseEntity<Componente> {
         val reparacion = reparacionService.obtenerPorId(request.reparacionId)
 
         val componente = Componente(

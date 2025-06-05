@@ -7,6 +7,7 @@ import com.proyectochad.backend.model.Seguimiento
 import com.proyectochad.backend.service.ReparacionService
 import com.proyectochad.backend.service.SeguimientoService
 import com.proyectochad.backend.service.UsuarioService
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -20,7 +21,7 @@ class SeguimientoController(
 
     // POST http://localhost:8080/api/seguimientos
     @PostMapping
-    fun agregar(@RequestBody request: SeguimientoRequestDTO): ResponseEntity<Seguimiento> {
+    fun agregar(@RequestBody @Valid request: SeguimientoRequestDTO): ResponseEntity<Seguimiento> {
         val autor = usuarioService.buscarPorId(request.autorId)
             ?: return ResponseEntity.badRequest().build()
 

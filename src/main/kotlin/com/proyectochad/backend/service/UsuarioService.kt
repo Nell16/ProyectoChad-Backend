@@ -1,5 +1,6 @@
 package com.proyectochad.backend.service
 
+import com.proyectochad.backend.dto.LoginResponseDTO
 import com.proyectochad.backend.model.Usuario
 
 interface UsuarioService {
@@ -7,6 +8,7 @@ interface UsuarioService {
     fun buscarPorId(id: Long): Usuario?
     fun listarPorRol(rol: String): List<Usuario>
     fun actualizarRol(id: Long, nuevoRol: String): Usuario
-    fun login(correo: String, contrasena: String): Usuario?
+    fun loginYGenerarToken(correo: String, contrasena: String): LoginResponseDTO?
+
 
 }
