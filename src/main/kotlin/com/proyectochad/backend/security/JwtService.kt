@@ -1,5 +1,6 @@
 package com.proyectochad.backend.security
 
+import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
@@ -9,7 +10,8 @@ import java.util.*
 @Service
 class JwtService {
 
-    private val jwtSecret = Keys.secretKeyFor(SignatureAlgorithm.HS256)
+    private val claveSecreta = "UnaClaveSecretaMuySeguraYDe32Bytes!!".toByteArray()
+    private val jwtSecret = Keys.hmacShaKeyFor(claveSecreta)
 
     fun generarToken(correo: String, rol: String): String {
         val ahora = Date()
@@ -23,4 +25,13 @@ class JwtService {
             .signWith(jwtSecret)
             .compact()
     }
+
+    fun validarToken(token: String): Claims {
+        return Jwts.parserBuilder()
+            .setSigningKey(jwtSecret)
+            .build()
+            .parseClaimsJws(token)
+            .body
+    }
+
 }

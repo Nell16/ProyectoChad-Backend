@@ -45,9 +45,28 @@ class ReparacionController(
 
     //GET http://localhost:8080/api/reparaciones/{id}
     @GetMapping("/{id}")
-    fun obtenerPorId(@PathVariable id: Long): ResponseEntity<Reparacion> {
-        return ResponseEntity.ok(reparacionService.obtenerPorId(id))
+    fun obtenerPorId(@PathVariable id: Long): ResponseEntity<ReparacionDetalleDTO> {
+        val reparacion = reparacionService.obtenerPorId(id)
+        val componentes = componenteService.listarPorReparacion(id)
+        val dto = ReparacionDetalleDTO(
+            id = reparacion.id,
+            usuario = reparacion.usuario,
+            tecnico = reparacion.tecnico,
+            tipoEquipo = reparacion.tipoEquipo,
+            marca = reparacion.marca,
+            modelo = reparacion.modelo,
+            descripcionFalla = reparacion.descripcionFalla,
+            fechaIngreso = reparacion.fechaIngreso.toString(),
+            estado = reparacion.estado.name,
+            diagnostico = reparacion.diagnostico,
+            solucion = reparacion.solucion,
+            costo = reparacion.costo,
+            servicio = reparacion.servicio,
+            componentes = componentes
+        )
+        return ResponseEntity.ok(dto)
     }
+
 
     //GET http://localhost:8080/api/reparaciones/usuario/{usuarioId}
     @GetMapping("/usuario/{usuarioId}")
@@ -117,7 +136,7 @@ class ReparacionController(
             solucion = reparacion.solucion,
             costo = reparacion.costo,
             servicio = reparacion.servicio,
-            componentes = componentesDTO
+            componentes = componentes
         )
         return ResponseEntity.ok(respuesta)
     }

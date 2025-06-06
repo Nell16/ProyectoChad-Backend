@@ -1,6 +1,7 @@
 // ReparacionDetalleDTO.kt
 package com.proyectochad.backend.dto
 
+import com.proyectochad.backend.model.Componente
 import com.proyectochad.backend.model.Servicio
 import com.proyectochad.backend.model.Usuario
 
@@ -18,5 +19,6 @@ data class ReparacionDetalleDTO(
     val solucion: String?,
     val costo: Double?,
     val servicio: Servicio?,
-    val componentes: List<ComponenteResumenDTO>
+    val componentes: List<Componente>
+
 )
