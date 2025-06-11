@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 
 data class FacturaDetalleDTO(
     val factura: FacturaDTO,
-    val componentes: List<ComponenteDTO>
+    val componentes: List<ComponenteResumenDTO>
 )
 
 data class FacturaDTO(

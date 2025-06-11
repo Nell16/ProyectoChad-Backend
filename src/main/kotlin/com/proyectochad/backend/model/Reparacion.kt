@@ -32,7 +32,11 @@ data class Reparacion(
 
     val diagnostico: String? = null,
     val solucion: String? = null,
-    val costo: Double? = null
+    val costo: Double? = null,
+
+    @OneToMany(mappedBy = "reparacion", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, orphanRemoval = true)
+    val componentes: List<Componente> = emptyList()
+
 )
 
 

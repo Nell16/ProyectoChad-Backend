@@ -1,6 +1,7 @@
 package com.proyectochad.backend.controller
 
 import com.proyectochad.backend.dto.*
+import com.proyectochad.backend.mapper.ReparacionMapper
 import com.proyectochad.backend.model.Reparacion
 import com.proyectochad.backend.service.ComponenteService
 import com.proyectochad.backend.service.ReparacionService
@@ -39,45 +40,35 @@ class ReparacionController(
 
     //GET http://localhost:8080/api/reparaciones
     @GetMapping
-    fun obtenerTodas(): ResponseEntity<List<Reparacion>> {
-        return ResponseEntity.ok(reparacionService.obtenerTodas())
+    fun obtenerTodas(): ResponseEntity<List<ReparacionDTO>> {
+        val reparaciones = reparacionService.obtenerTodas()
+        val dtos = reparaciones.map { ReparacionMapper.toDTO(it) }
+        return ResponseEntity.ok(dtos)
     }
+
 
     //GET http://localhost:8080/api/reparaciones/{id}
     @GetMapping("/{id}")
-    fun obtenerPorId(@PathVariable id: Long): ResponseEntity<ReparacionDetalleDTO> {
+    fun obtenerPorId(@PathVariable id: Long): ResponseEntity<ReparacionDTO> {
         val reparacion = reparacionService.obtenerPorId(id)
-        val componentes = componenteService.listarPorReparacion(id)
-        val dto = ReparacionDetalleDTO(
-            id = reparacion.id,
-            usuario = reparacion.usuario,
-            tecnico = reparacion.tecnico,
-            tipoEquipo = reparacion.tipoEquipo,
-            marca = reparacion.marca,
-            modelo = reparacion.modelo,
-            descripcionFalla = reparacion.descripcionFalla,
-            fechaIngreso = reparacion.fechaIngreso.toString(),
-            estado = reparacion.estado.name,
-            diagnostico = reparacion.diagnostico,
-            solucion = reparacion.solucion,
-            costo = reparacion.costo,
-            servicio = reparacion.servicio,
-            componentes = componentes
-        )
-        return ResponseEntity.ok(dto)
+        return ResponseEntity.ok(ReparacionMapper.toDTO(reparacion))
     }
 
 
     //GET http://localhost:8080/api/reparaciones/usuario/{usuarioId}
     @GetMapping("/usuario/{usuarioId}")
-    fun obtenerPorUsuario(@PathVariable usuarioId: Long): ResponseEntity<List<Reparacion>> {
-        return ResponseEntity.ok(reparacionService.listarPorUsuarioId(usuarioId))
+    fun obtenerPorUsuario(@PathVariable usuarioId: Long): ResponseEntity<List<ReparacionDTO>> {
+        val reparaciones = reparacionService.listarPorUsuarioId(usuarioId)
+        val dtos = reparaciones.map { ReparacionMapper.toDTO(it) }
+        return ResponseEntity.ok(dtos)
     }
 
     //GET http://localhost:8080/api/reparaciones/tecnico/{idUsuario}
     @GetMapping("/tecnico/{tecnicoId}")
-    fun obtenerPorTecnico(@PathVariable tecnicoId: Long): ResponseEntity<List<Reparacion>> {
-        return ResponseEntity.ok(reparacionService.listarPorTecnicoId(tecnicoId))
+    fun obtenerPorTecnico(@PathVariable tecnicoId: Long): ResponseEntity<List<ReparacionDTO>> {
+        val reparaciones = reparacionService.listarPorTecnicoId(tecnicoId)
+        val dtos = reparaciones.map { ReparacionMapper.toDTO(it) }
+        return ResponseEntity.ok(dtos)
     }
 
     //PUT http://localhost:8080/api/reparaciones/{idReparacion}/asignar-tecnico?tecnicoId={idUsuario}

@@ -1,6 +1,7 @@
 package com.proyectochad.backend.controller
 
 import com.proyectochad.backend.dto.ComponenteRequestDTO
+import com.proyectochad.backend.mapper.ComponenteMapper
 import com.proyectochad.backend.model.Componente
 import com.proyectochad.backend.service.ComponenteService
 import com.proyectochad.backend.service.ReparacionService
@@ -31,7 +32,10 @@ class ComponenteController(
     }
 
     @GetMapping("/reparacion/{reparacionId}")
-    fun listarPorReparacion(@PathVariable reparacionId: Long): ResponseEntity<List<Componente>> {
-        return ResponseEntity.ok(componenteService.listarPorReparacion(reparacionId))
+    fun listarPorReparacion(@PathVariable reparacionId: Long): ResponseEntity<List<ComponenteResumenDTO>> {
+        val componentes = componenteService.listarPorReparacion(reparacionId)
+        val dtos = componentes.map { ComponenteMapper.toDTO(it) }
+        return ResponseEntity.ok(dtos)
     }
+
 }

@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/proyectochad
     username: postgres
-    password: ADMIN
+    password: admin
   jpa:
     hibernate:
       ddl-auto: update

@@ -4,6 +4,7 @@ import com.proyectochad.backend.model.Servicio
 import com.proyectochad.backend.repository.ServicioRepository
 import com.proyectochad.backend.service.ServicioService
 import org.springframework.stereotype.Service
+import jakarta.persistence.EntityNotFoundException
 
 @Service
 class ServicioServiceImpl(
@@ -18,7 +19,10 @@ class ServicioServiceImpl(
         return servicioRepository.findAll()
     }
 
-    override fun buscarPorId(id: Long): Servicio? {
-        return servicioRepository.findById(id).orElse(null)
+    override fun buscarPorId(id: Long): Servicio {
+        return servicioRepository.findById(id).orElseThrow {
+            EntityNotFoundException("Servicio con ID $id no encontrado")
+        }
     }
+
 }

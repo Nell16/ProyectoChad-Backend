@@ -1,6 +1,8 @@
 package com.proyectochad.backend.controller
 
+import com.proyectochad.backend.dto.ServicioDTO
 import com.proyectochad.backend.dto.ServicioRequestDTO
+import com.proyectochad.backend.mapper.ServicioMapper
 import com.proyectochad.backend.model.Servicio
 import com.proyectochad.backend.service.ServicioService
 import jakarta.validation.Valid
@@ -26,15 +28,17 @@ class ServicioController(
 
     // GET http://localhost:8080/api/servicios
     @GetMapping
-    fun listar(): ResponseEntity<List<Servicio>> {
-        return ResponseEntity.ok(servicioService.listar())
+    fun listar(): ResponseEntity<List<ServicioDTO>> {
+        val servicios = servicioService.listar()
+        val dtos = servicios.map { ServicioMapper.toDTO(it) }
+        return ResponseEntity.ok(dtos)
     }
+
 
     // GET http://localhost:8080/api/servicios/{id}
     @GetMapping("/{id}")
-    fun buscar(@PathVariable id: Long): ResponseEntity<Servicio> {
+    fun buscar(@PathVariable id: Long): ResponseEntity<ServicioDTO> {
         val servicio = servicioService.buscarPorId(id)
-        return if (servicio != null) ResponseEntity.ok(servicio)
-        else ResponseEntity.notFound().build()
+        return ResponseEntity.ok(ServicioMapper.toDTO(servicio))
     }
 }

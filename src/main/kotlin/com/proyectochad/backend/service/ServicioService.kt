@@ -5,5 +5,5 @@ import com.proyectochad.backend.model.Servicio
 interface ServicioService {
     fun crear(servicio: Servicio): Servicio
     fun listar(): List<Servicio>
-    fun buscarPorId(id: Long): Servicio?
+    fun buscarPorId(id: Long): Servicio
 }

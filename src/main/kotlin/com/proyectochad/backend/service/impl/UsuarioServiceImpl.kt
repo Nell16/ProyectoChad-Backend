@@ -7,6 +7,7 @@ import com.proyectochad.backend.repository.UsuarioRepository
 import com.proyectochad.backend.security.JwtService
 import com.proyectochad.backend.service.UsuarioService
 import org.springframework.stereotype.Service
+import jakarta.persistence.EntityNotFoundException
 
 @Service
 class UsuarioServiceImpl(
@@ -18,8 +19,10 @@ class UsuarioServiceImpl(
         return usuarioRepository.save(usuario)
     }
 
-    override fun buscarPorId(id: Long): Usuario? {
-        return usuarioRepository.findById(id).orElse(null)
+    override fun buscarPorId(id: Long): Usuario {
+        return usuarioRepository.findById(id).orElseThrow {
+            EntityNotFoundException("Usuario con ID $id no encontrado")
+        }
     }
 
     override fun listarPorRol(rol: String): List<Usuario> {
@@ -29,23 +32,25 @@ class UsuarioServiceImpl(
 
     override fun actualizarRol(id: Long, nuevoRol: String): Usuario {
         val usuario = usuarioRepository.findById(id)
-            .orElseThrow { IllegalArgumentException("Usuario no encontrado con ID: $id") }
+            .orElseThrow { EntityNotFoundException("Usuario con ID $id no encontrado") }
 
         val rolActualizado = try {
             Rol.valueOf(nuevoRol.uppercase())
         } catch (e: IllegalArgumentException) {
-            throw IllegalArgumentException("Rol inválido. Usa: CLIENTE, TECNICO o ADMIN.")
+            throw IllegalArgumentException("Rol inválido: '$nuevoRol'. Usa: CLIENTE, TECNICO o ADMIN.")
         }
 
         val usuarioActualizado = usuario.copy(rol = rolActualizado)
         return usuarioRepository.save(usuarioActualizado)
     }
 
-    override fun loginYGenerarToken(correo: String, contrasena: String): LoginResponseDTO? {
+    override fun loginYGenerarToken(correo: String, contrasena: String): LoginResponseDTO {
         val usuario = usuarioRepository.findByCorreo(correo)
-            ?: return null
+            ?: throw EntityNotFoundException("Usuario con correo '$correo' no encontrado")
 
-        if (usuario.contrasena != contrasena) return null
+        if (usuario.contrasena != contrasena) {
+            throw IllegalArgumentException("Contraseña incorrecta para el usuario '$correo'")
+        }
 
         val token = jwtService.generarToken(usuario.correo, usuario.rol.name)
 
@@ -56,5 +61,7 @@ class UsuarioServiceImpl(
         )
     }
 
-
+    override fun obtenerTodos(): List<Usuario> {
+        return usuarioRepository.findAll()
+    }
 }

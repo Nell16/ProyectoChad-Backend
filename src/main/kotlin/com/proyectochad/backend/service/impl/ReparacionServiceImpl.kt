@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service
 import com.proyectochad.backend.repository.UsuarioRepository
 import com.proyectochad.backend.model.Rol
 import com.proyectochad.backend.model.Servicio
+import jakarta.persistence.EntityNotFoundException
 
 
 @Service
@@ -26,7 +27,7 @@ class ReparacionServiceImpl(
 
     override fun obtenerPorId(id: Long): Reparacion {
         return reparacionRepository.findById(id).orElseThrow {
-            IllegalArgumentException("Reparación con ID $id no encontrada")
+            EntityNotFoundException("Reparación con ID $id no encontrada")
         }
     }
 
