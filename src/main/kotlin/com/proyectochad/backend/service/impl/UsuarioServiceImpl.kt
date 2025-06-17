@@ -57,7 +57,8 @@ class UsuarioServiceImpl(
         return LoginResponseDTO(
             token = token,
             correo = usuario.correo,
-            rol = usuario.rol.name
+            rol = usuario.rol.name,
+            idUsuario = usuario.id
         )
     }
 

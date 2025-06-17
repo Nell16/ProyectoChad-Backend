@@ -1,6 +1,7 @@
 package com.proyectochad.backend.controller
 
 import com.proyectochad.backend.dto.ComponenteRequestDTO
+import com.proyectochad.backend.dto.ComponenteResumenDTO
 import com.proyectochad.backend.mapper.ComponenteMapper
 import com.proyectochad.backend.model.Componente
 import com.proyectochad.backend.service.ComponenteService
