@@ -10,5 +10,6 @@ interface UsuarioService {
     fun actualizarRol(id: Long, nuevoRol: String): Usuario
     fun loginYGenerarToken(correo: String, contrasena: String): LoginResponseDTO?
     fun obtenerTodos(): List<Usuario>
+    fun buscarPorCorreo(correo: String): Usuario?
 
 }

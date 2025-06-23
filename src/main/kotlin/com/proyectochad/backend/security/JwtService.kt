@@ -13,18 +13,20 @@ class JwtService {
     private val claveSecreta = "UnaClaveSecretaMuySeguraYDe32Bytes!!".toByteArray()
     private val jwtSecret = Keys.hmacShaKeyFor(claveSecreta)
 
-    fun generarToken(correo: String, rol: String): String {
+    fun generarToken(id: Long, correo: String, rol: String): String {
         val ahora = Date()
-        val expiracion = Date(ahora.time + 1000 * 60 * 60) // 1 hora
+        val expiracion = Date(ahora.time + 1000 * 60 * 60)
 
         return Jwts.builder()
             .setSubject(correo)
             .claim("rol", rol)
+            .claim("id", id)
             .setIssuedAt(ahora)
             .setExpiration(expiracion)
             .signWith(jwtSecret)
             .compact()
     }
+
 
     fun validarToken(token: String): Claims {
         return Jwts.parserBuilder()

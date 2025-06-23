@@ -52,7 +52,8 @@ class UsuarioServiceImpl(
             throw IllegalArgumentException("Contraseña incorrecta para el usuario '$correo'")
         }
 
-        val token = jwtService.generarToken(usuario.correo, usuario.rol.name)
+        val token = jwtService.generarToken(usuario.id, usuario.correo, usuario.rol.name)
+
 
         return LoginResponseDTO(
             token = token,
@@ -65,4 +66,9 @@ class UsuarioServiceImpl(
     override fun obtenerTodos(): List<Usuario> {
         return usuarioRepository.findAll()
     }
+
+    override fun buscarPorCorreo(correo: String): Usuario? {
+        return usuarioRepository.findByCorreo(correo)
+    }
+
 }
