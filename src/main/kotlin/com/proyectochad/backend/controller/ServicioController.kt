@@ -21,7 +21,7 @@ class ServicioController(
         val nuevo = Servicio(
             nombre = request.nombre,
             descripcion = request.descripcion,
-            precioBase = request.precio
+            precioBase = request.precioBase
         )
         return ResponseEntity.ok(servicioService.crear(nuevo))
     }
@@ -41,4 +41,22 @@ class ServicioController(
         val servicio = servicioService.buscarPorId(id)
         return ResponseEntity.ok(ServicioMapper.toDTO(servicio))
     }
+
+    //PUT http://localhost:8080/api/servicios/{id}
+    @PutMapping("/{id}")
+    fun actualizarServicio(
+        @PathVariable id: Long,
+        @RequestBody @Valid dto: ServicioRequestDTO
+    ): ResponseEntity<ServicioDTO> {
+        val actualizado = servicioService.actualizar(id, dto)
+        return ResponseEntity.ok(ServicioMapper.toDTO(actualizado))
+    }
+
+    //DELETE http://localhost:8080/api/servicios/{id}
+    @DeleteMapping("/{id}")
+    fun eliminarServicio(@PathVariable id: Long): ResponseEntity<Void> {
+        servicioService.eliminar(id)
+        return ResponseEntity.noContent().build()
+    }
+
 }

@@ -13,4 +13,5 @@ interface ReparacionService {
     fun listarPorTecnicoId(tecnicoId: Long): List<Reparacion>
     fun actualizarDiagnostico(id: Long, diagnostico: String, solucion: String, costo: Double): Reparacion
     fun asignarServicio(reparacionId: Long, servicio: Servicio): Reparacion
+    fun obtenerSinTecnico(): List<Reparacion>
 }

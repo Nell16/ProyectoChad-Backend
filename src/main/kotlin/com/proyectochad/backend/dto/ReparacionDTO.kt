@@ -11,7 +11,7 @@ data class ReparacionDTO(
     val diagnostico: String?,
     val solucion: String?,
     val costo: Double?,
-    val cliente: UsuarioDTO,
+    val usuario: UsuarioDTO,
     val tecnico: UsuarioDTO?,
     val servicio: ServicioDTO?,
     val componentes: List<ComponenteResumenDTO>

@@ -1,5 +1,6 @@
 package com.proyectochad.backend.service.impl
 
+import com.proyectochad.backend.dto.ServicioRequestDTO
 import com.proyectochad.backend.model.Servicio
 import com.proyectochad.backend.repository.ServicioRepository
 import com.proyectochad.backend.service.ServicioService
@@ -24,5 +25,25 @@ class ServicioServiceImpl(
             EntityNotFoundException("Servicio con ID $id no encontrado")
         }
     }
+
+    override fun actualizar(id: Long, dto: ServicioRequestDTO): Servicio {
+        val existente = buscarPorId(id)
+        val actualizado = Servicio(
+            id = existente.id,
+            nombre = dto.nombre,
+            descripcion = dto.descripcion,
+            precioBase = dto.precioBase
+        )
+        return servicioRepository.save(actualizado)
+    }
+
+
+    override fun eliminar(id: Long) {
+        if (!servicioRepository.existsById(id)) {
+            throw EntityNotFoundException("Servicio con ID $id no existe")
+        }
+        servicioRepository.deleteById(id)
+    }
+
 
 }

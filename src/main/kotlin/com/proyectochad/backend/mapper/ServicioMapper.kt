@@ -7,6 +7,8 @@ object ServicioMapper {
     fun toDTO(servicio: Servicio): ServicioDTO = ServicioDTO(
         id = servicio.id,
         nombre = servicio.nombre,
-        descripcion = servicio.descripcion
+        descripcion = servicio.descripcion,
+        precioBase = servicio.precioBase
     )
 }
+

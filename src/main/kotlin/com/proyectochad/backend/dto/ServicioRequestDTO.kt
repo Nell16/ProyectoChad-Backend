@@ -12,7 +12,7 @@ data class ServicioRequestDTO(
     @field:NotBlank(message = "La descripción del servicio es obligatoria")
     val descripcion: String,
 
-    @field:NotNull(message = "El precio es obligatorio")
+    @field:NotNull(message = "El precio base es obligatorio")
     @field:Positive(message = "El precio debe ser mayor que 0")
-    val precio: Double
+    val precioBase: Double
 )

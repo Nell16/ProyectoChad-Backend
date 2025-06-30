@@ -180,12 +180,11 @@ class ReparacionController(
     // GET http://localhost:8080/api/reparaciones/sin-tecnico
     @GetMapping("/sin-tecnico")
     fun listarSinTecnico(): ResponseEntity<List<ReparacionDTO>> {
-        val sinTecnico = reparacionService.obtenerTodas()
-            .filter { it.tecnico == null }
-
+        val sinTecnico = reparacionService.obtenerSinTecnico()
         val dtos = sinTecnico.map { ReparacionMapper.toDTO(it) }
         return ResponseEntity.ok(dtos)
     }
+
 
     @PutMapping("/{reparacionId}/autoasignar")
     fun autoasignarTecnico(

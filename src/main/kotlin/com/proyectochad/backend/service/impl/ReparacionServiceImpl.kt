@@ -75,7 +75,7 @@ class ReparacionServiceImpl(
             diagnostico = diagnostico,
             solucion = solucion,
             costo = costo,
-            estado = EstadoReparacion.REVISION // 👈 Cambio automático de estado
+            estado = EstadoReparacion.REVISION
         )
         return reparacionRepository.save(actualizada)
     }
@@ -84,6 +84,10 @@ class ReparacionServiceImpl(
         val reparacion = obtenerPorId(reparacionId)
         val actualizada = reparacion.copy(servicio = servicio)
         return reparacionRepository.save(actualizada)
+    }
+
+    override fun obtenerSinTecnico(): List<Reparacion> {
+        return reparacionRepository.findByTecnicoIsNull()
     }
 
 }

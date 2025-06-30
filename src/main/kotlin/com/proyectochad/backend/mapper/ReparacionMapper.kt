@@ -15,10 +15,11 @@ object ReparacionMapper {
         diagnostico = reparacion.diagnostico,
         solucion = reparacion.solucion,
         costo = reparacion.costo,
-        cliente = UsuarioMapper.toDTO(reparacion.usuario),
+        usuario = UsuarioMapper.toDTO(reparacion.usuario),
+
         tecnico = reparacion.tecnico?.let { UsuarioMapper.toDTO(it) },
         servicio = reparacion.servicio?.let {
-            ServicioDTO(it.id, it.nombre, it.descripcion)
+            ServicioDTO(it.id, it.nombre, it.descripcion, it.precioBase)
         },
         componentes = reparacion.componentes.map { componente ->
             ComponenteResumenDTO(
