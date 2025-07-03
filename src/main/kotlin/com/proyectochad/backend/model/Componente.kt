@@ -14,6 +14,6 @@ data class Componente(
     val cantidad: Int,
 
     @ManyToOne
-    @JoinColumn(name = "reparacion_id")
-    val reparacion: Reparacion
+    @JoinColumn(name = "reparacion_id", nullable = true)
+    var reparacion: Reparacion? = null
 )
