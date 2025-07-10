@@ -22,14 +22,20 @@ class UsuarioController(
     fun registrarUsuario(@RequestBody request: UsuarioRequestDTO): ResponseEntity<UsuarioDTO> {
         val nuevoUsuario = Usuario(
             id = 0,
-            nombre = request.nombre,
+            primerNombre = request.primerNombre,
+            segundoNombre = request.segundoNombre,
+            primerApellido = request.primerApellido,
+            segundoApellido = request.segundoApellido,
             correo = request.correo,
             contrasena = request.contrasena,
+            telefono = request.telefono,
+            fotoPerfilUrl = request.fotoPerfilUrl,
             rol = Rol.valueOf(request.rol)
         )
         val registrado = usuarioService.registrar(nuevoUsuario)
         return ResponseEntity.ok(UsuarioMapper.toDTO(registrado))
     }
+
 
 
     //POST http://localhost:8080/api/usuarios/login
@@ -73,6 +79,30 @@ class UsuarioController(
         val dtos = usuarios.map { usuario -> UsuarioMapper.toDTO(usuario) }
         return ResponseEntity.ok(dtos)
     }
+
+    @PutMapping("/{id}")
+    fun actualizarPerfil(
+        @PathVariable id: Long,
+        @RequestBody dto: UsuarioDTO
+    ): ResponseEntity<UsuarioDTO> {
+        val actualizado = Usuario(
+            id = id,
+            primerNombre = dto.primerNombre,
+            segundoNombre = dto.segundoNombre,
+            primerApellido = dto.primerApellido,
+            segundoApellido = dto.segundoApellido,
+            correo = dto.correo,
+            contrasena = usuarioService.buscarPorId(id)?.contrasena ?: "", // conservar contraseña
+            telefono = dto.telefono,
+            fotoPerfilUrl = dto.fotoPerfilUrl,
+            rol = Rol.valueOf(dto.rol) // No se actualizará en el service, pero se necesita para la entidad
+        )
+
+        val actualizadoFinal = usuarioService.actualizarDatosPerfil(id, actualizado)
+        return ResponseEntity.ok(UsuarioMapper.toDTO(actualizadoFinal))
+    }
+
+
 
 
 }

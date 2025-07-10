@@ -7,16 +7,27 @@ import com.proyectochad.backend.model.Usuario
 object UsuarioMapper {
     fun toDTO(usuario: Usuario): UsuarioDTO = UsuarioDTO(
         id = usuario.id,
-        nombre = usuario.nombre,
+        primerNombre = usuario.primerNombre,
+        segundoNombre = usuario.segundoNombre,
+        primerApellido = usuario.primerApellido,
+        segundoApellido = usuario.segundoApellido,
         correo = usuario.correo,
+        telefono = usuario.telefono,
+        fotoPerfilUrl = usuario.fotoPerfilUrl,
         rol = usuario.rol.name
     )
 
     fun toEntity(dto: UsuarioDTO): Usuario = Usuario(
         id = dto.id,
-        nombre = dto.nombre,
+        primerNombre = dto.primerNombre,
+        segundoNombre = dto.segundoNombre,
+        primerApellido = dto.primerApellido,
+        segundoApellido = dto.segundoApellido,
         correo = dto.correo,
-        contrasena = "", // dejar vacía si no se usa en el contexto
+        contrasena = "", // vacía si no se usa
+        telefono = dto.telefono,
+        fotoPerfilUrl = dto.fotoPerfilUrl,
         rol = Rol.valueOf(dto.rol)
     )
 }
+

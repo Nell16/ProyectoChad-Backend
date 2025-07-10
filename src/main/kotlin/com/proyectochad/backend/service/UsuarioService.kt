@@ -11,5 +11,5 @@ interface UsuarioService {
     fun loginYGenerarToken(correo: String, contrasena: String): LoginResponseDTO?
     fun obtenerTodos(): List<Usuario>
     fun buscarPorCorreo(correo: String): Usuario?
-
+    fun actualizarDatosPerfil(id: Long, datosActualizados: Usuario): Usuario
 }

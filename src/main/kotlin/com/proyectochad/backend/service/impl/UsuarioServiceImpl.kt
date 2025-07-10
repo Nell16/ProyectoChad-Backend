@@ -47,19 +47,21 @@ class UsuarioServiceImpl(
     override fun loginYGenerarToken(correo: String, contrasena: String): LoginResponseDTO {
         val usuario = usuarioRepository.findByCorreo(correo)
             ?: throw EntityNotFoundException("Usuario con correo '$correo' no encontrado")
-
         if (usuario.contrasena != contrasena) {
             throw IllegalArgumentException("Contraseña incorrecta para el usuario '$correo'")
         }
-
         val token = jwtService.generarToken(usuario.id, usuario.correo, usuario.rol.name)
-
-
         return LoginResponseDTO(
             token = token,
+            idUsuario = usuario.id,
             correo = usuario.correo,
             rol = usuario.rol.name,
-            idUsuario = usuario.id
+            primerNombre = usuario.primerNombre,
+            segundoNombre = usuario.segundoNombre,
+            primerApellido = usuario.primerApellido,
+            segundoApellido = usuario.segundoApellido,
+            telefono = usuario.telefono,
+            fotoPerfilUrl = usuario.fotoPerfilUrl
         )
     }
 
@@ -71,4 +73,20 @@ class UsuarioServiceImpl(
         return usuarioRepository.findByCorreo(correo)
     }
 
+    override fun actualizarDatosPerfil(id: Long, datosActualizados: Usuario): Usuario {
+        val existente = usuarioRepository.findById(id)
+            .orElseThrow { EntityNotFoundException("Usuario con ID $id no encontrado") }
+
+        val actualizado = existente.copy(
+            primerNombre = datosActualizados.primerNombre,
+            segundoNombre = datosActualizados.segundoNombre,
+            primerApellido = datosActualizados.primerApellido,
+            segundoApellido = datosActualizados.segundoApellido,
+            correo = datosActualizados.correo,
+            telefono = datosActualizados.telefono,
+            fotoPerfilUrl = datosActualizados.fotoPerfilUrl
+        )
+
+        return usuarioRepository.save(actualizado)
+    }
 }
