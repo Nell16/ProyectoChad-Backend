@@ -57,4 +57,11 @@ class ComponenteServiceImpl(
         }
         componenteRepository.deleteById(id)
     }
+
+    override fun buscarPorId(id: Long): Componente {
+        return componenteRepository.findById(id).orElseThrow {
+            EntityNotFoundException("Componente con ID $id no encontrado")
+        }
+    }
+
 }

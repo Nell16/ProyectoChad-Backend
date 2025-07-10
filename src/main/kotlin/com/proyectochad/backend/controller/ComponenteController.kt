@@ -84,6 +84,28 @@ class ComponenteController(
         return ResponseEntity.ok(ComponenteMapper.toDTO(creado))
     }
 
+    @PostMapping("/asignar-general")
+    fun asignarGeneralAReparacion(
+        @RequestParam componenteId: Long,
+        @RequestParam reparacionId: Long
+    ): ResponseEntity<ComponenteResumenDTO> {
+        val componenteBase = componenteService.buscarPorId(componenteId)
+        val reparacion = reparacionService.obtenerPorId(reparacionId)
+
+        val nuevo = Componente(
+            nombre = componenteBase.nombre,
+            descripcion = componenteBase.descripcion,
+            precio = componenteBase.precio,
+            cantidad = componenteBase.cantidad,
+            reparacion = reparacion
+        )
+
+        val guardado = componenteService.agregar(nuevo)
+        return ResponseEntity.ok(ComponenteMapper.toDTO(guardado))
+    }
+
+
+
 
 
 }

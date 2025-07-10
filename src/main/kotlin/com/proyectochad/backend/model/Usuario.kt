@@ -21,6 +21,7 @@ data class Usuario(
 
     val segundoApellido: String? = null,
 
+    @Column(unique = true)
     @field:NotBlank
     @field:Email
     val correo: String,

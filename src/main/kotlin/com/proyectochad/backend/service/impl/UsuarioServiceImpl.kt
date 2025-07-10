@@ -16,8 +16,13 @@ class UsuarioServiceImpl(
 ) : UsuarioService {
 
     override fun registrar(usuario: Usuario): Usuario {
+        val existente = usuarioRepository.findByCorreo(usuario.correo)
+        if (existente != null) {
+            throw IllegalArgumentException("Ya existe un usuario con el correo: ${usuario.correo}")
+        }
         return usuarioRepository.save(usuario)
     }
+
 
     override fun buscarPorId(id: Long): Usuario {
         return usuarioRepository.findById(id).orElseThrow {

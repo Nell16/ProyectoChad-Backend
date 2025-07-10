@@ -16,4 +16,6 @@ interface ComponenteService {
         reparacion: Reparacion?
     ): Componente
     fun eliminar(id: Long)
+    fun buscarPorId(id: Long): Componente
+
 }
